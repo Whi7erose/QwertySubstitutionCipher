@@ -1,11 +1,11 @@
 using System;
+using System.IO; // Required for file operations
 using System.Windows.Forms;
 
 namespace QwertySubstitutionCipher
 {
     public partial class Form1 : Form
     {
-        // Mapping strings - index position links plain to cipher
         private const string PlainUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         private const string CipherUpper = "QWERTYUIOPASDFGHJKLZXCVBNM";
         private const string PlainNums = "0123456789";
@@ -16,45 +16,25 @@ namespace QwertySubstitutionCipher
             InitializeComponent();
         }
 
-        // Encrypt a single character
         private char Encrypt(char ch)
         {
-            int idx;
+            int idx = PlainUpper.IndexOf(char.ToUpper(ch));
+            if (idx >= 0) return char.IsUpper(ch) ? CipherUpper[idx] : char.ToLower(CipherUpper[idx]);
 
-            // Check uppercase letters
-            idx = PlainUpper.IndexOf(char.ToUpper(ch));
-            if (idx >= 0)
-                return char.IsUpper(ch)
-                    ? CipherUpper[idx]
-                    : char.ToLower(CipherUpper[idx]);
-
-            // Check numbers
             idx = PlainNums.IndexOf(ch);
-            if (idx >= 0)
-                return CipherNums[idx];
+            if (idx >= 0) return CipherNums[idx];
 
-            // Keep everything else unchanged (spaces, punctuation)
             return ch;
         }
 
-        // Decrypt a single character
         private char Decrypt(char ch)
         {
-            int idx;
+            int idx = CipherUpper.IndexOf(char.ToUpper(ch));
+            if (idx >= 0) return char.IsUpper(ch) ? PlainUpper[idx] : char.ToLower(PlainUpper[idx]);
 
-            // Check uppercase letters
-            idx = CipherUpper.IndexOf(char.ToUpper(ch));
-            if (idx >= 0)
-                return char.IsUpper(ch)
-                    ? PlainUpper[idx]
-                    : char.ToLower(PlainUpper[idx]);
-
-            // Check numbers
             idx = CipherNums.IndexOf(ch);
-            if (idx >= 0)
-                return PlainNums[idx];
+            if (idx >= 0) return PlainNums[idx];
 
-            // Keep everything else unchanged
             return ch;
         }
 
@@ -62,7 +42,6 @@ namespace QwertySubstitutionCipher
         {
             try
             {
-                // Encrypt takes text from the TOP box and puts it in the BOTTOM box
                 if (!string.IsNullOrEmpty(txtSimpleText.Text))
                 {
                     string result = string.Empty;
@@ -86,7 +65,6 @@ namespace QwertySubstitutionCipher
         {
             try
             {
-                // Decrypt ALSO takes text from the TOP box and puts it in the BOTTOM box
                 if (!string.IsNullOrEmpty(txtSimpleText.Text))
                 {
                     string result = string.Empty;
@@ -103,6 +81,60 @@ namespace QwertySubstitutionCipher
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // --- NEW FEATURE: LOAD FILE ---
+        private void btnLoadFile_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+                openFileDialog.Title = "Select a Text File to Load";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        // Read all text from the selected file and put it in the top box
+                        txtSimpleText.Text = File.ReadAllText(openFileDialog.FileName);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error reading file: " + ex.Message, "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        // --- NEW FEATURE: SAVE FILE ---
+        private void btnSaveFile_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtCipherText.Text))
+            {
+                MessageBox.Show("There is no output text to save!", "Empty Output", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+                saveFileDialog.Title = "Save Output As";
+                saveFileDialog.DefaultExt = "txt";
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        // Write the contents of the bottom box to the selected file path
+                        File.WriteAllText(saveFileDialog.FileName, txtCipherText.Text);
+                        MessageBox.Show("File saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error saving file: " + ex.Message, "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
         }
 
