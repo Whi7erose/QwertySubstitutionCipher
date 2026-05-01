@@ -62,6 +62,7 @@ namespace QwertySubstitutionCipher
         {
             try
             {
+                // Encrypt takes text from the TOP box and puts it in the BOTTOM box
                 if (!string.IsNullOrEmpty(txtSimpleText.Text))
                 {
                     string result = string.Empty;
@@ -72,12 +73,12 @@ namespace QwertySubstitutionCipher
                 }
                 else
                 {
-                    MessageBox.Show("Please Enter the Simple Text to Encrypt!");
+                    MessageBox.Show("Please enter the text you want to encrypt in the top box!", "Input Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -85,22 +86,23 @@ namespace QwertySubstitutionCipher
         {
             try
             {
-                if (!string.IsNullOrEmpty(txtCipherText.Text))
+                // Decrypt ALSO takes text from the TOP box and puts it in the BOTTOM box
+                if (!string.IsNullOrEmpty(txtSimpleText.Text))
                 {
                     string result = string.Empty;
-                    foreach (char ch in txtCipherText.Text)
+                    foreach (char ch in txtSimpleText.Text)
                         result += Decrypt(ch).ToString();
 
-                    txtSimpleText.Text = result;
+                    txtCipherText.Text = result;
                 }
                 else
                 {
-                    MessageBox.Show("Please Enter the Cipher Text to Decrypt!");
+                    MessageBox.Show("Please enter the text you want to decrypt in the top box!", "Input Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
