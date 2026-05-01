@@ -32,7 +32,21 @@ namespace QwertySubstitutionCipher
                     foreach (char txt in b)
                     {
                         char c;
-                        if (txt == 'A') { c = 'Q'; }
+
+                        // Numbers - Shift by 5
+                        if (txt == '0') { c = '5'; }
+                        else if (txt == '1') { c = '6'; }
+                        else if (txt == '2') { c = '7'; }
+                        else if (txt == '3') { c = '8'; }
+                        else if (txt == '4') { c = '9'; }
+                        else if (txt == '5') { c = '0'; }
+                        else if (txt == '6') { c = '1'; }
+                        else if (txt == '7') { c = '2'; }
+                        else if (txt == '8') { c = '3'; }
+                        else if (txt == '9') { c = '4'; }
+
+                        // Letters
+                        else if (txt == 'A') { c = 'Q'; }
                         else if (txt == 'a') { c = 'q'; }
                         else if (txt == 'B') { c = 'W'; }
                         else if (txt == 'b') { c = 'w'; }
@@ -85,6 +99,7 @@ namespace QwertySubstitutionCipher
                         else if (txt == 'Z') { c = 'M'; }
                         else if (txt == 'z') { c = 'm'; }
                         else { c = txt; }
+
                         secondtxt += c.ToString();
                     }
                     txtCipherText.Text = secondtxt;
@@ -111,7 +126,21 @@ namespace QwertySubstitutionCipher
                     foreach (char txt in b)
                     {
                         char c;
-                        if (txt == 'Q') { c = 'A'; }
+
+                        // Numbers - Shift back by 5
+                        if (txt == '5') { c = '0'; }
+                        else if (txt == '6') { c = '1'; }
+                        else if (txt == '7') { c = '2'; }
+                        else if (txt == '8') { c = '3'; }
+                        else if (txt == '9') { c = '4'; }
+                        else if (txt == '0') { c = '5'; }
+                        else if (txt == '1') { c = '6'; }
+                        else if (txt == '2') { c = '7'; }
+                        else if (txt == '3') { c = '8'; }
+                        else if (txt == '4') { c = '9'; }
+
+                        // Letters
+                        else if (txt == 'Q') { c = 'A'; }
                         else if (txt == 'q') { c = 'a'; }
                         else if (txt == 'W') { c = 'B'; }
                         else if (txt == 'w') { c = 'b'; }
@@ -164,6 +193,7 @@ namespace QwertySubstitutionCipher
                         else if (txt == 'M') { c = 'Z'; }
                         else if (txt == 'm') { c = 'z'; }
                         else { c = txt; }
+
                         secondtxt += c.ToString();
                     }
                     txtSimpleText.Text = secondtxt;
